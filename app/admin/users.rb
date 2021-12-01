@@ -10,8 +10,8 @@ ActiveAdmin.register User do
   permit_params do
     allowed = %i[name email]
     allowed << %i[password password_confirmation] if current_user == get_resource_ivar
-    allowed << :role if current_user.admin?
-    allowed
+    allowed << %i[password password_confirmation role] if current_user.admin?
+    allowed.flatten.uniq
   end
 
   index download_links: false do
