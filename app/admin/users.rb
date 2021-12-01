@@ -42,7 +42,18 @@ ActiveAdmin.register User do
 
       column span: 2 do
         panel 'Latest translations' do
-
+          table_for user.translations.order(created_at: :desc).limit(10) do
+            # column(:game){|translation| game_file_name(translation.game_file.game) }
+            column('File'){|translation| link_to translation.game_file.name, admin_game_file_path(translation.game_file) }
+            column('#'){|translation| link_to translation.line.row_number.to_s, new_admin_game_file_translation_path(translation.game_file.id, locale: 'fr', line_id: translation.line.id) }
+            column(:speaker){|translation| line_face(translation.line) }
+            column(:translation) do |translation|
+              attributes_table_for [translation] do
+                row('English'){|tl| tl.line.english }
+                row('🇫🇷 French'){|tl| tl.text }
+              end
+            end
+          end
         end
       end
     end

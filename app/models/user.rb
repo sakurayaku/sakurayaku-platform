@@ -5,6 +5,8 @@ class User < ApplicationRecord
   include Gravtastic
   gravtastic
 
+  has_many :translations
+
   def admin?
     role == 'admin'
   end
