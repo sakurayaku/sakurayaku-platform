@@ -7,12 +7,16 @@ ActiveAdmin.register Translation do
   belongs_to :game_file
 
   config.filters = false
-  config.sort_order = 'row_number_asc'
+  # config.sort_order = 'row_number_asc'
   config.paginate = false
 
-  breadcrumb do
-    ['foo', 'bar']
-  end
+  # breadcrumb do
+  #   [
+  #     link_to('Admin', admin_root_path),
+  #     link_to('Game files', admin_game_files_path),
+  #     game_file.name
+  #   ]
+  # end
 
   permit_params do
     allowed = %i[user_id text]
@@ -20,6 +24,10 @@ ActiveAdmin.register Translation do
   end
 
   controller do
+    def index
+      redirect_to admin_game_file_path(params[:game_file_id])
+    end
+
     def show
       redirect_to edit_admin_game_file_translation_path(params[:game_file_id], resource.id)
     end
