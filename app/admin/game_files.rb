@@ -61,7 +61,7 @@ ActiveAdmin.register GameFile do
               ].join('<br />').html_safe
             end
             column('Speaker'){|line| line_face(line) }
-            # column('Japanese'){|line| line_japanese(line) }
+            # column('Japanese (OCR'){|line| line.japanese_ocr.try(:gsub, "\n", "<br />") }
             column('English'){|line| line.english }
             column('🇫🇷 French'){|line| @translations_fr[line.id] }
             column do |line|

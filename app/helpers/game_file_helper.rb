@@ -53,6 +53,11 @@ module GameFileHelper
 
   def line_japanese(line)
     return '' unless line.japanese
-    image_tag "https://sakurayaku-assets.s3.eu-west-3.amazonaws.com/#{line.japanese}.png"
+    [
+      image_tag("https://sakurayaku-assets.s3.eu-west-3.amazonaws.com/#{line.japanese}.png"),
+      '<br />',
+      line.japanese_ocr.try(:gsub, "\n", "<br />")
+    ].join.html_safe
+
   end
 end

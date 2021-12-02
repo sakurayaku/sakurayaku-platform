@@ -9,6 +9,7 @@ class CreateLine < ActiveRecord::Migration[6.1]
       t.string :face
       t.string :speaker, default: 'Und.'
       t.string :japanese
+      t.string :japanese_ocr
       t.string :english
       t.string :line_id
       t.string :order
