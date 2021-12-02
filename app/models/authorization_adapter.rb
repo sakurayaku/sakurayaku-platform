@@ -10,7 +10,7 @@ class AuthorizationAdapter < ActiveAdmin::AuthorizationAdapter
       return true if user.moderator?
       return action == :update && user.id == subject.id
     when GameFile
-      return action == :update && user.moderator?
+      return action == :update
     when Translation
       return true
     # when Line
