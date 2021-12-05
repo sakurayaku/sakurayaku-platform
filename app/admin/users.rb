@@ -9,6 +9,7 @@ ActiveAdmin.register User do
 
   permit_params do
     allowed = %i[name email]
+    allowed << %i[locale] if current_user.admin?
     allowed << %i[password password_confirmation] if current_user == get_resource_ivar
     allowed << %i[password password_confirmation role] if current_user.admin?
     allowed.flatten.uniq
@@ -16,8 +17,9 @@ ActiveAdmin.register User do
 
   index download_links: false do
     # id_column
-    column(:name){|user| user_avatar_and_link(user) }
-    column(:role){|user| user_role(user) }
+    column(:name)  {|user| user_avatar_and_link(user) }
+    column(:role)  {|user| user_role(user) }
+    column(:locale){|user| user_locale(user.locale) }
     column(:created_at)
     actions
   end
@@ -34,6 +36,7 @@ ActiveAdmin.register User do
             row(:avatar){|user| image_tag user.gravatar_url, class: 'gravatar' }
             row(:name)
             row(:role){|user| user_role(user) }
+            row(:locale){|user| user_locale(user.locale) }
             row(:email)
             row(:created_at)
           end
@@ -45,12 +48,12 @@ ActiveAdmin.register User do
           table_for user.translations.order(created_at: :desc).limit(10) do
             # column(:game){|translation| game_file_name(translation.game_file.game) }
             column('File'){|translation| link_to translation.game_file.name, admin_game_file_path(translation.game_file) }
-            column('#'){|translation| link_to translation.line.row_number.to_s, new_admin_game_file_translation_path(translation.game_file.id, locale: 'fr', line_id: translation.line.id) }
+            column('#'){|translation| link_to translation.line.row_number.to_s, new_admin_game_file_translation_path(translation.game_file.id, locale: current_user.locale, line_id: translation.line.id) }
             column(:speaker){|translation| line_face(translation.line) }
             column(:translation) do |translation|
               attributes_table_for [translation] do
                 row('English'){|tl| tl.line.english }
-                row('🇫🇷 French'){|tl| tl.text }
+                row(user_locale(translation.locale)){|tl| tl.text }
               end
             end
           end
@@ -64,7 +67,8 @@ ActiveAdmin.register User do
       f.input :name
       f.input :email
       if current_user.admin?
-        f.input :role, as: :select, collection: User.collection_roles
+        f.input :locale, as: :select, include_blank: false, collection: User.collection_locales
+        f.input :role, as: :select, include_blank: false, collection: User.collection_roles
       end
       if current_user.admin? || current_user == user
         f.input :password

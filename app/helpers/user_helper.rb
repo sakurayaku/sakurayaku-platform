@@ -10,6 +10,15 @@ module UserHelper
     end
   end
 
+  def user_locale(locale)
+    case locale
+    when 'es'
+      '🇪🇸 Spanish'
+    else
+      '🇫🇷 French'
+    end
+  end
+
   def user_avatar_and_link(user)
     [
       image_tag(user.gravatar_url, class: 'gravatar-16'),

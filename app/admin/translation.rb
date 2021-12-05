@@ -70,7 +70,7 @@ ActiveAdmin.register Translation do
   #   column do |line|
   #     link_to 'Edit', edit_admin_game_file_line_path(game_file.id, line.id)
   #   end
-  #   column('🇫🇷 French'){|line| @translations_fr[line.id] }
+  #   column(user_locale(current_user.locale)){|line| @translations_fr[line.id] }
   # end
 
   form do |f|
@@ -114,7 +114,7 @@ ActiveAdmin.register Translation do
                 end
                 attributes_table_for @prev_line do
                   row('English'){|line| line.english }
-                  row('🇫🇷 French'){|line| @prev_translation&.text }
+                  row(user_locale(current_user.locale)){|line| @prev_translation&.text }
                 end
                 div do
                   if @prev_translation
@@ -143,7 +143,7 @@ ActiveAdmin.register Translation do
                 end
                 attributes_table_for @next_line do
                   row('English'){|line| line.english }
-                  row('🇫🇷 French'){|line| @next_translation&.text }
+                  row(user_locale(current_user.locale)){|line| @next_translation&.text }
                 end
                 div do
                   if @next_translation
@@ -167,7 +167,7 @@ ActiveAdmin.register Translation do
 
           end
           attributes_table_for translation do
-            row('🇫🇷 French'){|line| translation.text }
+            row(user_locale(current_user.locale)){|line| translation.text }
           end
         end
         panel 'Translation' do

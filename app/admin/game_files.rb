@@ -50,7 +50,7 @@ ActiveAdmin.register GameFile do
 
       column span: 4 do
         panel 'Lines' do
-          @translations_fr = Translation.where(game_file_id: game_file.id, locale: 'fr').pluck(:line_id, :text).to_h
+          @translations = Translation.where(game_file_id: game_file.id, locale: current_user.locale).pluck(:line_id, :text).to_h
 
           table_for game_file.lines.order(row_number: :asc) do
             column('#') do |line|
@@ -63,12 +63,12 @@ ActiveAdmin.register GameFile do
             column('Speaker'){|line| line_face(line) }
             # column('Japanese (OCR'){|line| line.japanese_ocr.try(:gsub, "\n", "<br />") }
             column('English'){|line| line.english }
-            column('🇫🇷 French'){|line| @translations_fr[line.id] }
+            column(user_locale(current_user.locale)){|line| @translations[line.id] }
             column do |line|
-              if @translations_fr[line.id].presence
-                link_to 'Edit', new_admin_game_file_translation_path(game_file.id, locale: 'fr', line_id: line.id)
+              if @translations[line.id].presence
+                link_to 'Edit', new_admin_game_file_translation_path(game_file.id, locale: current_user.locale, line_id: line.id)
               else
-                link_to 'Translate', new_admin_game_file_translation_path(game_file.id, locale: 'fr', line_id: line.id)
+                link_to 'Translate', new_admin_game_file_translation_path(game_file.id, locale: current_user.locale, line_id: line.id)
               end
             end
             # column('ID'){|line| line.line_id }

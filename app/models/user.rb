@@ -23,8 +23,19 @@ class User < ApplicationRecord
   end
 
   class << self
+    def collection_locales
+      [
+        ['🇫🇷 French', 'fr'],
+        ['🇪🇸 Spanish', 'es']
+      ]
+    end
+
     def collection_roles
-      [['Administrator', 'admin'], ['Moderator', 'moderator']]
+      [
+        ['User', ''],
+        ['Administrator', 'admin'],
+        ['Moderator', 'moderator'],
+      ]
     end
   end
 end
