@@ -168,6 +168,20 @@ ActiveAdmin.register Translation do
           end
           attributes_table_for translation do
             row(user_locale(current_user.locale)){|line| translation.text }
+            histories = translation.history.map do |k,v|
+              [k.split(':'), v].flatten
+            end.select do |ts, user_id, txt|
+              txt.presence
+            end.sort_by(&:first).reverse
+            if histories
+              row('History') do
+                table_for histories do
+                  column('User'){|history| User.find_by(id: history[1]).name }
+                  column('Time'){|history| Time.at(history[0].to_i).strftime('%F %H:%M:%S')}
+                  column('Text'){|history| history[2] }
+                end
+              end
+            end
           end
         end
         panel 'Translation' do
