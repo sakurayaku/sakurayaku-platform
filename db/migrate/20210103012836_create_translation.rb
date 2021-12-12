@@ -14,5 +14,7 @@ class CreateTranslation < ActiveRecord::Migration[6.1]
 
       t.timestamps
     end
+
+    add_index :translations, %i[line_id locale], unique: true
   end
 end

@@ -1,6 +1,5 @@
 include GameFileHelper
 
-
 ActiveAdmin.register Translation do
   menu false
   actions :all, except: [:destroy]#, :index, :show]

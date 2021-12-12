@@ -11,4 +11,33 @@ class GameFile < ApplicationRecord
       [['Sakura Taisen', 'SakTai1']]
     end
   end
+
+  class << self
+    def joins_lines
+      joins(%[
+        LEFT JOIN (
+          SELECT
+            game_file_id,
+            COALESCE(COUNT(*), 0) AS count_lines
+          FROM lines
+          GROUP BY game_file_id
+        ) lines_count
+        ON lines_count.game_file_id = game_files.id
+      ])
+    end
+
+    def joins_translation(locale)
+      joins(%[
+        LEFT JOIN (
+          SELECT
+            game_file_id,
+            COALESCE(COUNT(*), 0) AS count_#{locale}
+          FROM translations
+          WHERE locale = '#{locale}'
+          GROUP BY game_file_id
+        ) translations_#{locale}
+        ON translations_#{locale}.game_file_id = game_files.id
+      ])
+    end
+  end
 end

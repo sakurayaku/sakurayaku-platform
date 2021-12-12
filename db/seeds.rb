@@ -15,7 +15,7 @@ end.to_h
 correspondance['/ExtractedData/Faces/UnknownFace.png'] = '750654cd7110d2ef9c57d1d70ff3e0e3'
 
 
-Dir['../Webpages/Html/*.php'].each do |html_file|
+Dir['../Webpages/Html/*.{html,pho}'].sort.each do |html_file|
   game_file = html_file.split('/').last.split('.').first
   game_file = GameFile.find_or_create_by!(game: 'SakTai1', name: game_file)
   game_file.reload
